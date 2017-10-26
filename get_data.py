@@ -11,6 +11,6 @@ driver.get("http://www.google.com")
 sleep(init_sleep)
 driver.get(base_url+"Hyderabad")
 
-p = Popen("ps -p $(pidof chrome)", shell=True, stdin=PIPE, stdout=PIPE )
-out, err = p.communicate(os.linesep.join(["%"+str(i)+"$x", "pass"]))
+p = Popen("ps -p $(pidof chrome)", shell=True, stdout=PIPE )
+out, err = p.communicate()
 print out
