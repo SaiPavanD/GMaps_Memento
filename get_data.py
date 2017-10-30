@@ -25,7 +25,7 @@ def load_page(url):
     # re initialize the tab
     driver.get("http://google.com")
 
-for i in xrange(2):
+for i in xrange(len(cities)):
     # init chrome
     driver = webdriver.Chrome()
     driver.get("http://google.com")
