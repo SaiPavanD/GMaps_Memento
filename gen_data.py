@@ -2,7 +2,7 @@ from utils import *
 import collections
 import csv
 from random import randint
-from selenium.common.exceptions import TimeoutException  
+from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
 
 if(len(sys.argv)!=4):
@@ -39,7 +39,7 @@ for q in xrange(int(sys.argv[3])):
 	#randomly selecting argv[3] number of cities from dataset
 	i = randint(0, 2000)
 	for j in xrange(5):
-		# init chrome		
+		# init chrome
 		driver = webdriver.Chrome()
 		driver.get("http://google.com")
 		tab_pid = run_cmd('ps -p $(pidof chrome) | grep -- "--type=renderer" | grep -v -- "--extension"').strip().split(' ')[0]
@@ -58,13 +58,6 @@ for q in xrange(int(sys.argv[3])):
 		t2.join()
 		driver.quit()
 		counter=collections.Counter(drs)
-		vals = counter.most_common()
-		#vals now contains tuples of the form (value,frequency)
-		for k in xrange(len(vals)):
-			op.append([q,i,cities[i],vals[k][0],vals[k][1]])
+		op.append((cities[i],dict(counter)))
 		print q
 	cities.pop(i)
-
-with open(sys.argv[2], "wb") as f:
-	writer = csv.writer(f)
-	writer.writerows(op)
