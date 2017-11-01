@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from subprocess import Popen, PIPE
+import csv
 
 import os
 import threading
