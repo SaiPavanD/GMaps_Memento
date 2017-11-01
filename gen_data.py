@@ -2,6 +2,8 @@ from utils import *
 import collections
 import csv
 from random import randint
+from selenium.common.exceptions import TimeoutException  
+from selenium.common.exceptions import NoSuchElementException
 
 if(len(sys.argv)!=4):
 	print "Usage : python gen_data.py <input_cities_list> <output_dump_file> <number of cities>"
@@ -34,11 +36,10 @@ def load_page(url):
 	driver.get("http://google.com")
 
 for q in xrange(int(sys.argv[3])):
-	#randomly selecting argv[3] number of citiesfrom dataset
-	i = randint(0, len(cities)-1)
-	tmp = []
+	#randomly selecting argv[3] number of cities from dataset
+	i = randint(0, 2000)
 	for j in xrange(5):
-		# init chrome
+		# init chrome		
 		driver = webdriver.Chrome()
 		driver.get("http://google.com")
 		tab_pid = run_cmd('ps -p $(pidof chrome) | grep -- "--type=renderer" | grep -v -- "--extension"').strip().split(' ')[0]
@@ -56,13 +57,12 @@ for q in xrange(int(sys.argv[3])):
 		t1.join()
 		t2.join()
 		driver.quit()
-		tmp.extend(drs)
-	counter=collections.Counter(tmp)
-	vals = counter.most_common()
-	#vals now contains tuples of the form (value,frequency)
-	for k in xrange(len(vals)):
-		op.append([q,i,cities[i],vals[k][0],vals[k][1]])
-	print q
+		counter=collections.Counter(drs)
+		vals = counter.most_common()
+		#vals now contains tuples of the form (value,frequency)
+		for k in xrange(len(vals)):
+			op.append([q,i,cities[i],vals[k][0],vals[k][1]])
+		print q
 	cities.pop(i)
 
 with open(sys.argv[2], "wb") as f:
