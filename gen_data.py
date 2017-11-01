@@ -30,7 +30,7 @@ def load_page(url):
 	global driver
 	driver.get(url)
 	# wait for ajax items to load
-	WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//script[@async and @src]')), "Timeout waiting for page to load")
+	WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '//script[@async and @src]')), "Timeout waiting for page to load")
 	loop_cond = False
 	# re initialize the tab
 	driver.get("http://google.com")
@@ -38,7 +38,7 @@ def load_page(url):
 for q in xrange(int(sys.argv[3])):
 	#randomly selecting argv[3] number of cities from dataset
 	i = randint(0, 2000)
-	for j in xrange(5):
+	for j in xrange(1):
 		# init chrome
 		driver = webdriver.Chrome()
 		driver.get("http://google.com")
@@ -61,3 +61,7 @@ for q in xrange(int(sys.argv[3])):
 		op.append((cities[i],dict(counter)))
 		print q
 	cities.pop(i)
+
+pretty_print(sys.argv[2], op)
+
+print pretty_read(sys.argv[2])
