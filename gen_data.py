@@ -1,12 +1,7 @@
 from utils import *
-import collections
-import csv
-from random import randint
-from selenium.common.exceptions import TimeoutException
-from selenium.common.exceptions import NoSuchElementException
 
 if(len(sys.argv)!=4):
-	print "Usage : python gen_data.py <input_cities_list> <output_dump_file> <number of cities>"
+	print "Usage : python gen_data.py <input_cities_list> <output_dump_file> <num_iterations>"
 	sys.exit(0)
 
 # global shared vars for communicating b/w thread and main
@@ -16,6 +11,7 @@ loop_cond = True
 # base params
 base_url = 'http://www.google.com/maps/place/'
 cities = read_cities(sys.argv[1])
+city_file = []
 op = []
 
 def read_vals(pid):
@@ -32,13 +28,9 @@ def load_page(url):
 	# wait for ajax items to load
 	WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, '//script[@async and @src]')), "Timeout waiting for page to load")
 	loop_cond = False
-	# re initialize the tab
-	driver.get("http://google.com")
 
-for q in xrange(int(sys.argv[3])):
-	#randomly selecting argv[3] number of cities from dataset
-	i = randint(0, 2000)
-	for j in xrange(1):
+for i in xrange(len(cities)):
+	for j in xrange(int(sys.argv[3])):
 		# init chrome
 		driver = webdriver.Chrome()
 		driver.get("http://google.com")
@@ -57,11 +49,9 @@ for q in xrange(int(sys.argv[3])):
 		t1.join()
 		t2.join()
 		driver.quit()
-		counter=collections.Counter(drs)
-		op.append((cities[i],dict(counter)))
-		print q
-	cities.pop(i)
+
+		# counter=collections.Counter(drs)
+		op.append((cities[i],drs))
+	print i
 
 pretty_print(sys.argv[2], op)
-
-print pretty_read(sys.argv[2])
